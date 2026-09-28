@@ -5,13 +5,20 @@ export const PrereqTreeView = ({ node, onSelectCourse, depth = 0 }) => {
   if (!node) return null;
 
   return (
-    <View style={[styles.container, { marginLeft: depth * 12 }]}>
+    <View style={[styles.container, depth > 0 && styles.indentedContainer]}>
       <TouchableOpacity
         style={[styles.nodeChip, node.isCycle && styles.cycleChip]}
+        activeOpacity={0.7}
         onPress={() => onSelectCourse(node.code)}
       >
-        <Text style={styles.codeText}>{node.code}</Text>
-        {node.isCycle && <Text style={styles.cycleBadge}>Cycle Detected</Text>}
+        <Text style={[styles.codeText, node.isCycle && styles.cycleCodeText]}>
+          {node.code}
+        </Text>
+        {node.isCycle ? (
+          <Text style={styles.cycleBadge}>Cycle</Text>
+        ) : (
+          <Text style={styles.arrowIcon}> ></Text>
+        )}
       </TouchableOpacity>
 
       {node.children && node.children.length > 0 && (
@@ -32,34 +39,50 @@ export const PrereqTreeView = ({ node, onSelectCourse, depth = 0 }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 4,
+    marginVertical: 3,
+  },
+  indentedContainer: {
+    marginLeft: 12,
+    paddingLeft: 10,
     borderLeftWidth: 2,
-    borderLeftColor: '#E2E8F0',
-    paddingLeft: 8,
+    borderLeftColor: '#EFE3D3',
   },
   nodeChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EDF2F7',
+    backgroundColor: '#F7EDE1',
     paddingHorizontal: 10,
     paddingVertical: 6,
-    borderRadius: 6,
+    borderRadius: 8,
     alignSelf: 'flex-start',
+    borderWidth: 1,
+    borderColor: '#EFE3D3',
   },
   cycleChip: {
-    backgroundColor: '#FED7D7',
+    backgroundColor: '#FDF2F2',
+    borderColor: '#F8B4B4',
   },
   codeText: {
-    fontWeight: '600',
-    color: '#2D3748',
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#6E4D25',
+  },
+  cycleCodeText: {
+    color: '#9B1C1C',
   },
   cycleBadge: {
     marginLeft: 6,
-    fontSize: 10,
-    color: '#C53030',
+    fontSize: 11,
+    color: '#9B1C1C',
     fontWeight: 'bold',
   },
+  arrowIcon: {
+    fontSize: 14,
+    color: '#8C7B6C',
+    fontWeight: 'bold',
+    marginLeft: 2,
+  },
   childrenContainer: {
-    marginTop: 4,
+    marginTop: 2,
   },
 });
